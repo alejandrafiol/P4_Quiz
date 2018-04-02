@@ -2,6 +2,8 @@
 const figlet = require('figlet');
 const chalk = require('chalk');
 
+//Debemos modificar este modulo, para que en vez de que los mensajes aparezcan en la consola,
+// aparezcan por el socket de los clientes.
 
 /**
  * Dar color a un string.
@@ -26,8 +28,9 @@ const colorize = (msg, color) => {
  * @param color Color del texto.
  */
 
-const log = (msg, color) => {
-    console.log(colorize(msg, color));
+const log = (socket, msg, color) => {
+    //Como se meterá retorno de carro, añadimos el "\n"
+    socket.write(colorize(msg, color) + "\n");
 };
 
 
@@ -38,8 +41,8 @@ const log = (msg, color) => {
  * @param color Color del texto.
  */
 
-const biglog = (msg, color) => {
-    log(figlet.textSync(msg, { horizontalLayout: 'full' }), color);
+const biglog = (socket, msg, color) => {
+    log(socket, figlet.textSync(msg, { horizontalLayout: 'full' }), color);
 };
 
 
@@ -49,8 +52,9 @@ const biglog = (msg, color) => {
  * @param emsg Texto del mensaje de error.
  */
 
-const errorlog = (emsg) => {
-    console.log(`${colorize("Error", "red")}: ${colorize(colorize(emsg, "red"), "bgYellowBright")}`);
+const errorlog = (socket, emsg) => {
+    //También cambiamos el console.log por sockt.write y añadimos el retorno de carro.
+    socket.write(`${colorize("Error", "red")}: ${colorize(colorize(emsg, "red"), "bgYellowBright")}\n`);
 
 };
 
